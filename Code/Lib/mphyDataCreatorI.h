@@ -14,8 +14,9 @@ See LICENSE.txt in the top level directory for details.
 
 #include <vector>
 
-class dataReceiver {
+class dataInterface {
 public:
 	virtual std::vector<std::pair<double, double> > GetData() = 0;
 };
+
 
