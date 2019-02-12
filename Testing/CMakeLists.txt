@@ -17,6 +17,7 @@ set(TMP_DIR ${CMAKE_BINARY_DIR}/Testing/Temporary)
 
 set(TEST_CASES
   mphyBasicTest
+  mphyLeastSquaresSolverTests
 )
 
 foreach(_test_case ${TEST_CASES})
@@ -32,3 +33,4 @@ endforeach()
 ##################################################################################################
 
 add_test(Example ${EXECUTABLE_OUTPUT_PATH}/mphyBasicTest)
+add_test(Testingargs ${EXECUTABLE_OUTPUT_PATH}/mphyLeastSquaresSolverTests)
