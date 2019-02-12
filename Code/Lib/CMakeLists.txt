@@ -17,11 +17,14 @@ set(MPHYG0022CW1_LIBRARY_NAME mphy0022cw1)
 set(MPHYG0022CW1_LIBRARY_SRCS
   mphyBasicTypes.cpp
   mphyException.cpp
+  mphyLinearDataCreator.cpp
   # Add .cpp files here
 )
 
 set(MPHYG0022CW1_LIBRARY_HDRS
   mphyExceptionMacro.h
+  mphyDataCreatorI.h
+  mphyLinearDataCreator.h
   # Add h files here
 )
 
