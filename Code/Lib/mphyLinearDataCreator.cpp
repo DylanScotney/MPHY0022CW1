@@ -1,4 +1,3 @@
-#include "mphyLinearDataCreator.h"
 /*=============================================================================
 
 MPHYG0022CW1: CW1, 2019: Linear Regression.
@@ -13,6 +12,13 @@ See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
 
+#include "mphyLinearDataCreator.h"
+
 namespace mphy {
+	
+std::vector<std::pair<double, double>> linDataCreator::GetData()
+{
+	return std::vector<std::pair<double, double>>(0);
+}
 
 } // end namespace mphy

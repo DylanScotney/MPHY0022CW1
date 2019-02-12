@@ -18,7 +18,7 @@ namespace mphy {
 
 class linDataCreator : public dataInterface {
 public:
-	std::vector<std::pair<double, double> > GetData()=0;
+	std::vector< std::pair<double, double> > GetData() override;
 };
 
 } // end namespace mphy
