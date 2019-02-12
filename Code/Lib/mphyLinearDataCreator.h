@@ -17,8 +17,11 @@ See LICENSE.txt in the top level directory for details.
 namespace mphy {
 
 class linDataCreator : public dataInterface {
+private:
+	std::vector< std::pair<double, double> > mock_data;
 public:
-	std::vector< std::pair<double, double> > GetData() override;
+	const std::vector< std::pair<double, double> > GetData() override;
+	const std::vector < std::pair<double, double> > getMockData(int num);
 };
 
 } // end namespace mphy

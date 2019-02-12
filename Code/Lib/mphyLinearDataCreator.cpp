@@ -13,12 +13,32 @@ See LICENSE.txt in the top level directory for details.
 =============================================================================*/
 
 #include "mphyLinearDataCreator.h"
+#include <random>
+#include <iostream>
+
 
 namespace mphy {
 	
-std::vector<std::pair<double, double>> linDataCreator::GetData()
+const std::vector<std::pair<double, double>> linDataCreator::GetData()
 {
 	return std::vector<std::pair<double, double>>(0);
 }
+
+const std::vector<std::pair<double, double>> linDataCreator::getMockData(int num)
+{
+	/*returns a 2 x num dataset of randomly distributed (y, x) points*/
+
+	int seed = 1;
+	std::mt19937 mt(seed);
+	std::uniform_real_distribution<double> xdist(0, 99);
+	std::uniform_real_distribution<double> ydist(0, 99);
+
+	for (int i = 0; i < num; i++) {
+		mock_data.push_back(std::make_pair(xdist(mt), ydist(mt)));
+	}
+	
+	return mock_data;
+}
+
 
 } // end namespace mphy
