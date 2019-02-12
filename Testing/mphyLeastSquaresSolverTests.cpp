@@ -25,7 +25,7 @@ TEST_CASE("Instansiation of linDataCreator", "linDataCreator") {
 	REQUIRE(dataComm);
 }
 
-TEST_CASE("Random data gen", "linDataCreator") {
+TEST_CASE("Size of dataset", "linDataCreator") {
 	std::unique_ptr<linDataCreator> data(new linDataCreator);
 	std::vector<std::pair<double, double>> mockData;
 
@@ -34,11 +34,34 @@ TEST_CASE("Random data gen", "linDataCreator") {
 
 	REQUIRE(static_cast<int>(mockData.size()) == numData);
 
+}
 
-	/*for (auto i = mockData.begin(); i != mockData.end(); i++) {
-		std::cout << i->first << " " << i->second << std::endl;
-	}*/
+TEST_CASE("Distribution of dataset", "linDataCreator") {
+	std::unique_ptr<linDataCreator> data(new linDataCreator);
+	std::vector<std::pair<double, double>> mockData;
 
+	const int numData = 10000;
+	const double tol = 1; // tolerence for expected value
+	const double xRange[2] = { 0, 100 };
+	const double xExpct = (xRange[1] - xRange[0]) / 2; // expected x val
+	const double yRange[2] = { 0, 100 };
+	const double yExpct = (yRange[0] - yRange[1]) / 2; // expected y val
+	
+	mockData = data->getMockData(numData, xRange, yRange);
+
+	double yAvrge = 0;
+	double xAvrge = 0;
+
+	for (auto i = mockData.begin(); i != mockData.end(); i++) {
+		xAvrge += i->first;
+		yAvrge += i->second;
+	}
+
+	xAvrge = xAvrge / numData;
+	yAvrge = yAvrge / numData;
+
+	REQUIRE(fabs(xAvrge - xExpct) < tol);
+	REQUIRE(fabs(yAvrge - yExpct) < tol);
 }
 
 } // end namespace mphy
