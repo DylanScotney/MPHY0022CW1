@@ -24,14 +24,14 @@ const std::vector<std::pair<double, double>> linDataCreator::GetData()
 	return std::vector<std::pair<double, double>>(0);
 }
 
-const std::vector<std::pair<double, double>> linDataCreator::getMockData(int num)
+const std::vector<std::pair<double, double>> linDataCreator::getMockData(const int num, const double xRange[2], const double yRange[2])
 {
 	/*returns a 2 x num dataset of randomly distributed (y, x) points*/
 
 	int seed = 1;
 	std::mt19937 mt(seed);
-	std::uniform_real_distribution<double> xdist(0, 99);
-	std::uniform_real_distribution<double> ydist(0, 99);
+	std::uniform_real_distribution<double> xdist(xRange[0], xRange[1]);
+	std::uniform_real_distribution<double> ydist(yRange[0], yRange[1]);
 
 	for (int i = 0; i < num; i++) {
 		mock_data.push_back(std::make_pair(xdist(mt), ydist(mt)));
@@ -39,6 +39,5 @@ const std::vector<std::pair<double, double>> linDataCreator::getMockData(int num
 	
 	return mock_data;
 }
-
 
 } // end namespace mphy
