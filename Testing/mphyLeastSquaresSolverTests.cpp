@@ -34,15 +34,16 @@ TEST_CASE("Size of dataset", "linDataCreator") {
 	mockData = data->GetData();
 
 	REQUIRE(static_cast<int>(mockData.size()) == numData);
-
 }
 
 TEST_CASE("Distribution of dataset", "linDataCreator") {
 	/*Simple test for uniform distribution by comparing the average 
 	value of numData datapoints with the expected value from range*/
 
+	typedef std::vector<std::pair<double, double>> vecPairdd;
+
 	std::unique_ptr<dataInterface> data(new linDataCreator());
-	std::vector<std::pair<double, double>> mockData;
+	vecPairdd mockData;
 
 	const double tol = 1; // tolerence for expected value
 	const double xExpct = (data->xRange[1] - data->xRange[0]) / 2; 
@@ -53,7 +54,7 @@ TEST_CASE("Distribution of dataset", "linDataCreator") {
 	double yAvrge = 0;
 	double xAvrge = 0;
 
-	for (auto i = mockData.begin(); i != mockData.end(); i++) {
+	for (vecPairdd::iterator i = mockData.begin(); i != mockData.end(); i++) {
 		xAvrge += i->first;
 		yAvrge += i->second;
 	}
