@@ -17,6 +17,7 @@ See LICENSE.txt in the top level directory for details.
 #include "mphyLinearDataCreator.h"
 #include <iostream>
 
+
 namespace mphy {
 
 TEST_CASE("Instansiation of linDataCreator", "linDataCreator") {
@@ -28,26 +29,25 @@ TEST_CASE("Instansiation of linDataCreator", "linDataCreator") {
 TEST_CASE("Size of dataset", "linDataCreator") {
 	std::unique_ptr<linDataCreator> data(new linDataCreator);
 	std::vector<std::pair<double, double>> mockData;
-
-	int numData = 10;
-	mockData = data->getMockData(numData);
+	int numData = 10000;
+	mockData = data->GetData();
 
 	REQUIRE(static_cast<int>(mockData.size()) == numData);
 
 }
 
 TEST_CASE("Distribution of dataset", "linDataCreator") {
-	std::unique_ptr<linDataCreator> data(new linDataCreator);
+	/*Simple test for uniform distribution by comparing the average 
+	value of numData datapoints with the expected value from range*/
+
+	std::unique_ptr<dataInterface> data(new linDataCreator());
 	std::vector<std::pair<double, double>> mockData;
 
-	const int numData = 10000;
 	const double tol = 1; // tolerence for expected value
-	const double xRange[2] = { 0, 100 };
-	const double xExpct = (xRange[1] - xRange[0]) / 2; // expected x val
-	const double yRange[2] = { 0, 100 };
-	const double yExpct = (yRange[0] - yRange[1]) / 2; // expected y val
+	const double xExpct = (data->xRange[1] - data->xRange[0]) / 2; 
+	const double yExpct = (data->yRange[1] - data->yRange[0]) / 2; 
 	
-	mockData = data->getMockData(numData, xRange, yRange);
+	mockData = data->GetData();
 
 	double yAvrge = 0;
 	double xAvrge = 0;
@@ -57,8 +57,8 @@ TEST_CASE("Distribution of dataset", "linDataCreator") {
 		yAvrge += i->second;
 	}
 
-	xAvrge = xAvrge / numData;
-	yAvrge = yAvrge / numData;
+	xAvrge = xAvrge / (data->numData);
+	yAvrge = yAvrge / (data->numData);
 
 	REQUIRE(fabs(xAvrge - xExpct) < tol);
 	REQUIRE(fabs(yAvrge - yExpct) < tol);
