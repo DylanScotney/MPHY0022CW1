@@ -19,12 +19,7 @@ See LICENSE.txt in the top level directory for details.
 
 namespace mphy {
 	
-const std::vector<std::pair<double, double>> linDataCreator::GetData()
-{
-	return std::vector<std::pair<double, double>>(0);
-}
-
-const std::vector<std::pair<double, double>> linDataCreator::getMockData(const int num, const double xRange[2], const double yRange[2])
+std::vector<std::pair<double, double>> linDataCreator::GetData()
 {
 	/*returns a 2 x num dataset of randomly distributed (y, x) points*/
 
@@ -33,11 +28,13 @@ const std::vector<std::pair<double, double>> linDataCreator::getMockData(const i
 	std::uniform_real_distribution<double> xdist(xRange[0], xRange[1]);
 	std::uniform_real_distribution<double> ydist(yRange[0], yRange[1]);
 
-	for (int i = 0; i < num; i++) {
+	for (int i = 0; i < numData; i++) {
 		mock_data.push_back(std::make_pair(xdist(mt), ydist(mt)));
 	}
-	
+
 	return mock_data;
 }
+
+
 
 } // end namespace mphy

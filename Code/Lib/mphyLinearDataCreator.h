@@ -20,8 +20,9 @@ class linDataCreator : public dataInterface {
 private:
 	std::vector< std::pair<double, double> > mock_data;
 public:
-	const std::vector< std::pair<double, double> > GetData() override;
-	const std::vector < std::pair<double, double> > getMockData(const int num, const double xRange[2], const double yRange[2]);
+	linDataCreator() {};
+	~linDataCreator() {};
+	std::vector< std::pair<double, double> > GetData() override;
 };
 
 } // end namespace mphy
