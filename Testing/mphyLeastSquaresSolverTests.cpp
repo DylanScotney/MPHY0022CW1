@@ -15,6 +15,7 @@ See LICENSE.txt in the top level directory for details.
 #include "catch.hpp"
 #include "mphyCatchMain.h"
 #include "mphyLinearDataCreator.h"
+#include "mphyNormalEquationSolverStrategy.h"
 #include <iostream>
 
 
@@ -62,6 +63,12 @@ TEST_CASE("Distribution of dataset", "linDataCreator") {
 
 	REQUIRE(fabs(xAvrge - xExpct) < tol);
 	REQUIRE(fabs(yAvrge - yExpct) < tol);
+}
+
+TEST_CASE("Instansiation of normSolver", "linDataCreator") {
+	std::unique_ptr<normSolver> solver(new normSolver);
+
+	REQUIRE(solver);
 }
 
 } // end namespace mphy
