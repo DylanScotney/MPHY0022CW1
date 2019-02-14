@@ -18,6 +18,7 @@ set(MPHYG0022CW1_LIBRARY_SRCS
   mphyBasicTypes.cpp
   mphyException.cpp
   mphyLinearDataCreator.cpp
+  mphyNormalEquationSolverStrategy.cpp
   # Add .cpp files here
 )
 
@@ -25,6 +26,8 @@ set(MPHYG0022CW1_LIBRARY_HDRS
   mphyExceptionMacro.h
   mphyDataCreatorI.h
   mphyLinearDataCreator.h
+  mphyLinearModelSolverStrategyI.h
+  mphyNormalEquationSolverStrategy.h
   # Add h files here
 )
 
