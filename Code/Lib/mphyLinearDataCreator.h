@@ -18,11 +18,11 @@ namespace mphy {
 
 class linDataCreator : public dataInterface {
 private:
-	std::vector< std::pair<double, double> > mock_data;
+	vecPairdd mock_data;
 public:
 	linDataCreator() {};
 	~linDataCreator() {};
-	std::vector< std::pair<double, double> > GetData() override;
+	vecPairdd GetData() override;
 };
 
 } // end namespace mphy

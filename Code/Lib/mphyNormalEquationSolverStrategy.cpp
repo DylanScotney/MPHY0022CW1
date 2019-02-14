@@ -14,7 +14,11 @@ See LICENSE.txt in the top level directory for details.
 
 #include "mphyNormalEquationSolverStrategy.h"
 
-std::pair<double, double> mphy::normSolver::FitData(std::vector<std::pair<double, double>>)
+namespace mphy {
+
+std::pair<double, double> normSolver::FitData(vecPairdd)
 {
 	return std::pair<double, double>(0, 0);
 }
+
+} // end namespace mphy

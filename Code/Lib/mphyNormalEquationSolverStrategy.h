@@ -19,7 +19,7 @@ namespace mphy {
 class normSolver : public dataSolverI {	
 
 public:
-	std::pair<double, double> FitData(std::vector<std::pair<double, double> >) override;
+	std::pair<double, double> FitData(vecPairdd) override;
 };
 
 } // end namespace mphy

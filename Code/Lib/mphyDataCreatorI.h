@@ -14,6 +14,8 @@ See LICENSE.txt in the top level directory for details.
 
 #include <vector>
 
+typedef std::vector<std::pair<double, double>> vecPairdd;
+
 class dataInterface {
 private:
 
@@ -37,6 +39,6 @@ public:
 	}
 
 	//~dataInterface();
-	virtual std::vector< std::pair<double, double> > GetData() = 0;
+	virtual vecPairdd GetData() = 0;
 
 };

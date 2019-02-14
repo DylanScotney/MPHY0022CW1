@@ -16,10 +16,9 @@ See LICENSE.txt in the top level directory for details.
 #include <random>
 #include <iostream>
 
-
 namespace mphy {
 	
-std::vector<std::pair<double, double>> linDataCreator::GetData()
+vecPairdd linDataCreator::GetData()
 {
 	/*returns a 2 x num dataset of randomly distributed (y, x) points*/
 
@@ -34,7 +33,5 @@ std::vector<std::pair<double, double>> linDataCreator::GetData()
 
 	return mock_data;
 }
-
-
 
 } // end namespace mphy
