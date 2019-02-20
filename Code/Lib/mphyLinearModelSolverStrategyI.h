@@ -20,6 +20,7 @@ namespace mphy {
 class dataSolverI {
 public:
 	virtual pairdd FitData(vecPairdd) = 0;
+
 };
 
 } // end namespace mphy

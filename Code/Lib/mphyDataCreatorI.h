@@ -44,6 +44,6 @@ public:
 
 };
 
-}
+} // end namespace mphy
 
 #endif

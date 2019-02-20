@@ -9,7 +9,7 @@ typedef std::pair<double, double> pairdd;
 
 typedef std::vector<std::pair<double, double>> vecPairdd;
 
-typedef std::vector<double> vecd;
+typedef std::vector<double> vectord;
 
 } // end namespace mphy
 
