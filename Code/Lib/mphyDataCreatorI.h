@@ -20,21 +20,19 @@ class dataInterface {
 private:
 
 public:
-	double xRange[2], yRange[2];
+	double xRange[2], noise;
 	int numData;
 
 	dataInterface() {
 		xRange[0] = 0;
 		xRange[1] = 100;
-		yRange[0] = 0;
-		yRange[1] = 100;
+		noise = 5;
 		numData = 10000;
 	}
-	dataInterface(double x0, double xf, double y0, double yf, int n) {
+	dataInterface(double x0, double xf, double Noise, int n) {
 		xRange[0] = x0;
 		xRange[1] = xf;
-		yRange[0] = y0;
-		yRange[0] = yf;
+		noise = Noise;
 		numData = n;
 	}
 
