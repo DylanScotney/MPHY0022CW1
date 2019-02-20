@@ -28,6 +28,7 @@ set(MPHYG0022CW1_LIBRARY_HDRS
   mphyLinearDataCreator.h
   mphyLinearModelSolverStrategyI.h
   mphyNormalEquationSolverStrategy.h
+  vectorPairTypes.h
   # Add h files here
 )
 

@@ -13,14 +13,13 @@ See LICENSE.txt in the top level directory for details.
 =============================================================================*/
 
 #include <vector>
-
-typedef std::vector<std::pair<double, double>> vecPairdd;
+#include "vectorPairTypes.h"
 
 namespace mphy {
 
 class dataSolverI {
 public:
-	virtual std::pair<double, double> FitData(vecPairdd) = 0;
+	virtual pairdd FitData(vecPairdd) = 0;
 };
 
 } // end namespace mphy

@@ -13,13 +13,14 @@ See LICENSE.txt in the top level directory for details.
 =============================================================================*/
 
 #include "mphyLinearModelSolverStrategyI.h"
+#include "vectorPairTypes.h"
 
 namespace mphy {
 
 class normSolver : public dataSolverI {	
 
 public:
-	std::pair<double, double> FitData(vecPairdd) override;
+	pairdd FitData(vecPairdd data) override;
 };
 
 } // end namespace mphy

@@ -13,6 +13,7 @@ See LICENSE.txt in the top level directory for details.
 =============================================================================*/
 
 #include "mphyDataCreatorI.h"
+#include "vectorPairTypes.h"
 
 namespace mphy {
 

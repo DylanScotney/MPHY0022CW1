@@ -20,8 +20,9 @@ namespace mphy {
 	
 vecPairdd linDataCreator::GetData()
 {
-	/*returns a 2 x num dataset of randomly distributed (y, x) points*/
-	// y = c1*x + c2 + noise
+	/*returns a 2 x num dataset of randomly distributed x points and 
+	 y = c1*x + c2 + noise*/
+
 	double c1, c2, x;
 
 	c1 = 2; 

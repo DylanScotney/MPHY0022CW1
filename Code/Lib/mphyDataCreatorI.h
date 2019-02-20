@@ -11,10 +11,13 @@ PURPOSE.
 See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
+#ifndef mphyDataCreatorI_h
+#define mphyDataCreatorI_h
 
 #include <vector>
+#include "vectorPairTypes.h"
 
-typedef std::vector<std::pair<double, double>> vecPairdd;
+namespace mphy {
 
 class dataInterface {
 private:
@@ -40,3 +43,7 @@ public:
 	virtual vecPairdd GetData() = 0;
 
 };
+
+}
+
+#endif
