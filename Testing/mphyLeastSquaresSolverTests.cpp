@@ -17,7 +17,7 @@ See LICENSE.txt in the top level directory for details.
 #include "mphyLinearDataCreator.h"
 #include "mphyNormalEquationSolverStrategy.h"
 #include <iostream>
-
+ 
 
 namespace mphy {
 
@@ -47,23 +47,17 @@ TEST_CASE("Distribution of dataset", "linDataCreator") {
 
 	const double tol = 1; // tolerence for expected value
 	const double xExpct = (data->xRange[1] - data->xRange[0]) / 2; 
-	const double yExpct = (data->yRange[1] - data->yRange[0]) / 2; 
 	
 	mockData = data->GetData();
-
-	double yAvrge = 0;
 	double xAvrge = 0;
 
-	for (vecPairdd::iterator i = mockData.begin(); i != mockData.end(); i++) {
+	for (vecPairdd::iterator i = mockData.begin(); i != mockData.end(); ++i) {
 		xAvrge += i->first;
-		yAvrge += i->second;
 	}
 
 	xAvrge = xAvrge / (data->numData);
-	yAvrge = yAvrge / (data->numData);
 
 	REQUIRE(fabs(xAvrge - xExpct) < tol);
-	REQUIRE(fabs(yAvrge - yExpct) < tol);
 }
 
 TEST_CASE("Instansiation of normSolver", "linDataCreator") {
@@ -71,5 +65,6 @@ TEST_CASE("Instansiation of normSolver", "linDataCreator") {
 
 	REQUIRE(solver);
 }
+
 
 } // end namespace mphy
