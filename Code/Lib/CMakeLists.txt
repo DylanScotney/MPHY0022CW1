@@ -20,6 +20,7 @@ set(MPHYG0022CW1_LIBRARY_SRCS
   mphyLinearDataCreator.cpp
   mphyNormalEquationSolverStrategy.cpp
   mphyGradientDescentSolverStrategy.cpp
+  mphyFileLoaderDataCreator.cpp
   # Add .cpp files here
 )
 
@@ -31,6 +32,7 @@ set(MPHYG0022CW1_LIBRARY_HDRS
   mphyNormalEquationSolverStrategy.h
   vectorPairTypes.h
   mphyGradientDescentSolverStrategy.h
+  mphyFileLoaderDataCreator.h
   # Add h files here
 )
 
