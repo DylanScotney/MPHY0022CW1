@@ -41,19 +41,23 @@ public:
 		xRange[0] = x0;
 		xRange[1] = xf;
 		noise = Noise;
-		numData = n; 
+		numData = n;
 		c1 = xCoefficient;
 		c2 = intercept;
 	};
 
 	~linDataCreator() {};
 
-	vecPairdd GetData() override;
-
+	double getXCoeff() { return c1; }
+	double getIntercept() { return c2; }
 	double getXMin() { return xRange[0]; }
 	double getXMax() { return xRange[1]; }
 	double getNoise() { return noise; }
 	int getNumData() { return numData; }
+
+
+	vecPairdd GetData() override;
+	vecPairdd getMockData();
 };
 
 } // end namespace mphy

@@ -39,4 +39,10 @@ vecPairdd linDataCreator::GetData()
 	return mock_data;
 }
 
+vecPairdd linDataCreator::getMockData()
+{
+	if (mock_data.empty()) { throw std::runtime_error("mock_data is empty"); }
+	else return mock_data;
+}
+
 } // end namespace mphy
