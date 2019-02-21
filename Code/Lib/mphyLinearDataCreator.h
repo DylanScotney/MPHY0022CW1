@@ -12,6 +12,9 @@ See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
 
+#ifndef mphyLinearDataCreator_h
+#define mphyLinearDataCreator_h
+
 #include "mphyDataCreatorI.h"
 #include "vectorPairTypes.h"
 
@@ -28,3 +31,4 @@ public:
 
 } // end namespace mphy
 
+#endif

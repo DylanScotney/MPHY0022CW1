@@ -12,6 +12,9 @@ See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
 
+#ifndef mphyLinearModelSolverStrategy_h
+#define mphyLinearModelSolverStrategy_h
+
 #include <vector>
 #include "vectorPairTypes.h"
 
@@ -20,7 +23,8 @@ namespace mphy {
 class dataSolverI {
 public:
 	virtual pairdd FitData(vecPairdd) = 0;
-
 };
 
 } // end namespace mphy
+
+#endif

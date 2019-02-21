@@ -39,9 +39,7 @@ public:
 		numData = n;
 	}
 
-	//~dataInterface();
 	virtual vecPairdd GetData() = 0;
-
 };
 
 } // end namespace mphy

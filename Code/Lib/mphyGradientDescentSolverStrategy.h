@@ -11,3 +11,11 @@ PURPOSE.
 See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
+
+#ifndef mphyGradientDescentSolverStrategy_h
+#define mphyGradientDescentSolverStrategy_h
+
+
+
+
+#endif
