@@ -30,11 +30,11 @@ vecPairdd linDataCreator::GetData()
 
 	int seed = 1;
 	std::mt19937 mt(seed);
-	std::uniform_real_distribution<double> xdist(xRange[0], xRange[1]);
-	std::uniform_real_distribution<double> noiseDist(-noise, noise);
+	std::uniform_real_distribution<double> xdist(getXMin(), getXMax());
+	std::uniform_real_distribution<double> noiseDist(-getNoise(), getNoise());
 
 
-	for (int i = 0; i < numData; i++) {
+	for (int i = 0; i < getNumData(); i++) {
 		x = xdist(mt);
 		mock_data.push_back(std::make_pair(x, c1*x + c2 + noiseDist(mt)));
 	}

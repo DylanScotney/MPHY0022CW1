@@ -45,7 +45,7 @@ TEST_CASE("Distribution of dataset", "linDataCreator") {
 	vecPairdd mockData;
 
 	const double tol = 1; // tolerence for expected value
-	const double xExpct = (data->xRange[1] - data->xRange[0]) / 2; 
+	const double xExpct = (data->getXMax() - data->getXMin()) / 2; 
 	
 	mockData = data->GetData();
 	double xAvrge = 0;
@@ -54,7 +54,7 @@ TEST_CASE("Distribution of dataset", "linDataCreator") {
 		xAvrge += i->first;
 	}
 
-	xAvrge = xAvrge / (data->numData);
+	xAvrge = xAvrge / (data->getNumData());
 
 	REQUIRE(fabs(xAvrge - xExpct) < tol);
 }
@@ -86,8 +86,8 @@ TEST_CASE("Copy vector pair data to Eigen", "Norm Eqn Solver") {
 	zerosMx << 0, 0, 0, 0, 0, 0, 0, 0;
 	zerosVy << 0, 0, 0, 0; 
 
-	Xdata = solver->copyXtoEigen(mockData);	
-	Ydata = solver->copyYtoEigen(mockData);
+	Xdata = solver->_testcopyXtoEigen(mockData);	
+	Ydata = solver->_testcopyYtoEigen(mockData);
 
 	REQUIRE(expectedXdata - Xdata == zerosMx);
 	REQUIRE(expectedYdata - Ydata == zerosVy);
@@ -112,9 +112,7 @@ TEST_CASE("Normal Eqn Solution", "Norm Eqn Solver") {
 	REQUIRE((fabs(solver->FitData(mockData).second
 		- expectedSoln.second)
 		/ fabs(expectedSoln.second))
-		< tol);
-
-	
+		< tol);	
 	
 }
 
