@@ -88,4 +88,19 @@ pairdd normSolver::FitData(vecPairdd data){
 	return pairdd(theta_best(0), theta_best(1));
 }
 
+
+
+
+//////////// For unit tests of private methods DO NOT USE /////////////////
+
+Eigen::VectorXd normSolver::_testcopyYtoEigen(vecPairdd data)
+{
+	return copyYtoEigen(data);
+}
+
+Eigen::Matrix<double, Eigen::Dynamic, 2> normSolver::_testcopyXtoEigen(vecPairdd data)
+{
+	return copyXtoEigen(data);
+}
+
 } // end namespace mphy
