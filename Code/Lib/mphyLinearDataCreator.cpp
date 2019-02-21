@@ -23,10 +23,7 @@ vecPairdd linDataCreator::GetData()
 	/*returns a 2 x num dataset of randomly distributed x points and 
 	 y = c1*x + c2 + noise*/
 
-	double c1, c2, x;
-
-	c1 = 2; 
-	c2 = 1;
+	double x;
 
 	int seed = 1;
 	std::mt19937 mt(seed);

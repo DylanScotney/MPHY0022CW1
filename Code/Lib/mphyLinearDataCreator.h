@@ -22,9 +22,17 @@ namespace mphy {
 
 class linDataCreator : public dataInterface {
 private:
+	double c1, c2;  //y = c1 * x + c2 + noise
 	vecPairdd mock_data;
 public:
-	linDataCreator() {};
+	linDataCreator() {
+		c1 = 2;
+		c2 = 1;
+	};
+	linDataCreator(double xCoefficient, double intercept) {
+		c1 = xCoefficient;
+		c2 = intercept;
+	};
 	~linDataCreator() {};
 	vecPairdd GetData() override;
 };
