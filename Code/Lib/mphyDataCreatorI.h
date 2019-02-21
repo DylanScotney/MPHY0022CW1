@@ -21,10 +21,10 @@ namespace mphy {
 
 class dataInterface {
 private:
-
-public:
 	double xRange[2], noise;
 	int numData;
+
+public:
 
 	dataInterface() {
 		xRange[0] = 0;
@@ -40,6 +40,10 @@ public:
 	}
 
 	virtual vecPairdd GetData() = 0;
+	double getXMin() { return xRange[0]; }
+	double getXMax() { return xRange[1]; }
+	double getNoise() { return noise; }
+	int getNumData() { return numData; }
 };
 
 } // end namespace mphy
