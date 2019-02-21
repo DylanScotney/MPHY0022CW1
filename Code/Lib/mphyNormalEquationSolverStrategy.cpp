@@ -74,8 +74,6 @@ pairdd normSolver::FitData(vecPairdd data){
 	X:			a 2xnumData matrix of (1, x0; 1, x1; 1, x2...)
 	 */
 	
-	int iterCnt = 0;
-
 	Eigen::Matrix<double, Eigen::Dynamic, 2> xdata; 
 	Eigen::VectorXd ydata, theta_best; 
 
