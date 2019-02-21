@@ -28,20 +28,47 @@ TEST_CASE("Instansiation of linDataCreator", "linDataCreator") {
 	REQUIRE(dataComm);
 }
 
-TEST_CASE("Size of dataset", "linDataCreator") {
-	std::unique_ptr<linDataCreator> data(new linDataCreator);
-	vecPairdd mockData;
-	int numData = 10000;
-	mockData = data->GetData();
+TEST_CASE("Exception thrown for empty mock_data", "linDataCreator") {
+	std::unique_ptr<linDataCreator> data(new linDataCreator());
 
-	REQUIRE(static_cast<int>(mockData.size()) == numData);
+	bool caught = false;
+	try {
+		data->getMockData();
+	}
+	catch (std::exception& e) {
+		caught = true;
+	}
+
+	REQUIRE(caught);
 }
 
-TEST_CASE("Distribution of dataset", "linDataCreator") {
+TEST_CASE("Correct member values for paramaterised constructor", "linDataCreator") {
+	std::unique_ptr<linDataCreator> data(new linDataCreator(5, 4, 0, 20, 1, 9999));
+	double tol = 0.00000001;
+
+	REQUIRE(fabs(data->getXCoeff() - 5.0) < tol);
+	REQUIRE(fabs(data->getIntercept() - 4.0) < tol);
+	REQUIRE(fabs(data->getXMin() - 0.0) < tol);
+	REQUIRE(fabs(data->getXMax() - 20.0) < tol);
+	REQUIRE(fabs(data->getNoise() - 1.0) < tol);
+	REQUIRE(fabs(data->getNumData() - 9999.0) < tol);
+	
+}
+
+TEST_CASE("Size of mock dataset", "linDataCreator") {
+	std::unique_ptr<linDataCreator> data(new linDataCreator());
+	vecPairdd mockData;
+
+	mockData = data->GetData();
+
+	REQUIRE(static_cast<int>(mockData.size()) == data->getNumData());
+}
+
+TEST_CASE("Distribution of mock dataset", "linDataCreator") {
 	/*Simple test for uniform distribution by comparing the average 
 	value of numData datapoints with the expected value from range*/
 
-	std::unique_ptr<dataInterface> data(new linDataCreator());
+	std::unique_ptr<linDataCreator> data(new linDataCreator());
 	vecPairdd mockData;
 
 	const double tol = 1; // tolerence for expected value
@@ -94,15 +121,12 @@ TEST_CASE("Copy vector pair data to Eigen", "Norm Eqn Solver") {
 
 }
 
-TEST_CASE("Normal Eqn Solution", "Norm Eqn Solver") {
-	/*
-	Tests copyXtoEigen and copyYtoEigen.
-	*/
+TEST_CASE("Normal Eqn Solution with non-rand data", "Norm Eqn Solver") {
 	double tol = 0.000001; //tolerance 
 	std::unique_ptr<normSolver> solver(new normSolver);
 
 	vecPairdd mockData = { { 1,2 },{ 2,2 },{ 5,7 },{ 3,7 } };
-	pairdd expectedSoln(0.571428571428573, 1.428571428571428);
+	pairdd expectedSoln(1.428571428571428, 0.571428571428573);
 
 	REQUIRE((fabs(solver->FitData(mockData).first 
 			- expectedSoln.first) 
@@ -114,6 +138,23 @@ TEST_CASE("Normal Eqn Solution", "Norm Eqn Solver") {
 		/ fabs(expectedSoln.second))
 		< tol);	
 	
+}
+
+
+TEST_CASE("Normal Eqn Solution with zero noise", "Norm Eqn Solver") {
+
+	double tol = 0.0000001;
+
+	std::unique_ptr<linDataCreator> lineardata(new linDataCreator(4, 7, 0, 20, 0, 10000));
+	std::unique_ptr<normSolver> solver(new normSolver());
+	
+	pairdd theta_best;
+
+	vecPairdd mockData = lineardata->GetData();
+	theta_best = solver->FitData(mockData);
+
+	REQUIRE(fabs(theta_best.first - 4.0) < tol);
+	REQUIRE(fabs(theta_best.second - 7.0) < tol);
 }
 
 
