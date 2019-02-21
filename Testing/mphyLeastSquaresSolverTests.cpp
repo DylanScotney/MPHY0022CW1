@@ -17,6 +17,7 @@ See LICENSE.txt in the top level directory for details.
 #include "mphyLinearDataCreator.h"
 #include "mphyNormalEquationSolverStrategy.h"
 #include "mphyGradientDescentSolverStrategy.h"
+#include "mphyFileLoaderDataCreator.h"
 #include "vectorPairTypes.h"
 #include <iostream>
  
@@ -191,6 +192,15 @@ TEST_CASE("Convergence error thrown", "gradDesSolver") {
 
 	REQUIRE(caught);
 
+}
+
+TEST_CASE("Exract data from file", "dataLoadFile") {
+	std::string fileName = "C:\\Users\\dylan\\Dropbox\\UCL\\C++\\Coursework 01\\18138211\\MPHY0022CW1\\Testing\\Data\\TestData2.txt";
+	
+	std::unique_ptr<dataLoadFile> dataLoader(new dataLoadFile(fileName));
+
+	dataLoader->GetData();
+	
 }
 
 
