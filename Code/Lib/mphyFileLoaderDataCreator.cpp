@@ -1,4 +1,3 @@
-#include "mphyFileLoaderDataCreator.h"
 /*=============================================================================
 
 MPHYG0022CW1: CW1, 2019: Linear Regression.
@@ -13,7 +12,27 @@ See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
 
-vecPairdd mphy::dataLoadFile::GetData()
-{
-	return vecPairdd();
+#include "mphyFileLoaderDataCreator.h"
+#include "vectorPairTypes.h"
+#include <fstream>
+#include <iostream>
+
+namespace mphy {
+
+vecPairdd mphy::dataLoadFile::GetData(){
+	std::ifstream infile(filename);
+
+	if (!infile) {
+		throw std::runtime_error("File not found");
+	}
+
+	double x, y;
+	while (infile >> x >> y) {
+		std::cout << x << " " << y << std::endl;
+		loaded_data.push_back(std::make_pair(x, y));
+	}
+	
+	return loaded_data;
+}
+
 }

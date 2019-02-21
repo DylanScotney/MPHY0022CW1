@@ -15,7 +15,21 @@ See LICENSE.txt in the top level directory for details.
 #ifndef mphyFileLoaderDataCreator_h
 #define mphyFileLoaderDataCreator_h
 
+#include "mphyDataCreatorI.h"
+#include "vectorPairTypes.h"
+
 namespace mphy {
+
+class dataLoadFile : public dataInterface {
+private:
+	std::string filename;
+	vecPairdd loaded_data;
+public:
+	dataLoadFile(std::string FILENAME) {
+		filename = FILENAME; 
+	}
+	vecPairdd GetData() override;
+};
 
 } // end namespace mphy
 
