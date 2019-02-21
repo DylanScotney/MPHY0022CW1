@@ -16,6 +16,7 @@ See LICENSE.txt in the top level directory for details.
 #include "mphyCatchMain.h"
 #include "mphyLinearDataCreator.h"
 #include "mphyNormalEquationSolverStrategy.h"
+#include "mphyGradientDescentSolverStrategy.h"
 #include "vectorPairTypes.h"
 #include <iostream>
  
@@ -140,10 +141,9 @@ TEST_CASE("Normal Eqn Solution with non-rand data", "Norm Eqn Solver") {
 	
 }
 
-
 TEST_CASE("Normal Eqn Solution with zero noise", "Norm Eqn Solver") {
 
-	double tol = 0.0000001;
+	double tol = 1e-6;
 
 	std::unique_ptr<linDataCreator> lineardata(new linDataCreator(4, 7, 0, 20, 0, 10000));
 	std::unique_ptr<normSolver> solver(new normSolver());
@@ -155,6 +155,42 @@ TEST_CASE("Normal Eqn Solution with zero noise", "Norm Eqn Solver") {
 
 	REQUIRE(fabs(theta_best.first - 4.0) < tol);
 	REQUIRE(fabs(theta_best.second - 7.0) < tol);
+}
+
+TEST_CASE("Gradient Descent Solution with zero noise", "gradDesSolver") {
+
+	double tol = 1e-6;
+
+	std::unique_ptr<linDataCreator> lineardata(new linDataCreator(4, 7, 0, 20, 0, 100));
+	std::unique_ptr<gradDesSolver> solver(new gradDesSolver());
+
+	vecPairdd mockData = lineardata->GetData();
+
+	pairdd theta_best = solver->FitData(mockData);
+
+	REQUIRE(fabs(theta_best.first - 4.0) < tol);
+	REQUIRE(fabs(theta_best.second - 7.0) < tol);
+}
+
+TEST_CASE("Convergence error thrown", "gradDesSolver") {
+
+	double tol = 1e-6;
+
+	std::unique_ptr<linDataCreator> lineardata(new linDataCreator(4, 7, 0, 20, 0, 100));
+	std::unique_ptr<gradDesSolver> solver(new gradDesSolver(1, 10000));
+
+	vecPairdd mockData = lineardata->GetData();
+
+	bool caught = false;
+	try {
+		pairdd theta_best = solver->FitData(mockData);
+	}
+	catch (std::exception& e) {
+		caught = true;
+	}
+
+	REQUIRE(caught);
+
 }
 
 
