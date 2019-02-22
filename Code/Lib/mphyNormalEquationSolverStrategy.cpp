@@ -83,7 +83,7 @@ pairdd normSolver::FitData(vecPairdd data){
 	theta_best = ((xdata.transpose()*xdata).inverse())*xdata.transpose()*ydata;
 	
 
-	return pairdd(theta_best(1), theta_best(0));
+	return pairdd(theta_best(0), theta_best(1));
 }
 
 

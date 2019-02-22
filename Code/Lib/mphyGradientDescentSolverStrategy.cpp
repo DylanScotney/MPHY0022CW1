@@ -85,7 +85,7 @@ pairdd gradDesSolver::FitData(vecPairdd data){
 
 	}
 	
-	return pairdd(theta(1), theta(0));
+	return pairdd(theta(0), theta(1));
 }
 
 } // end namespace mphy

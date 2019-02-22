@@ -28,7 +28,6 @@ vecPairdd mphy::dataLoadFile::GetData(){
 
 	double x, y;
 	while (infile >> x >> y) {
-		std::cout << x << " " << y << std::endl;
 		loaded_data.push_back(std::make_pair(x, y));
 	}
 	
