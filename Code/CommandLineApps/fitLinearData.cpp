@@ -136,7 +136,7 @@ int main(int argc, char** argv) {
 			//needs at least 5 arguments if not using default params
 			else if (argc == 4) {
 				show_help(argv, "Grad Descent");
-				std::cout << "\nError: Incorrect number of additional Arguments." << std::endl;
+				std::cout << "Error: Incorrect number of additional Arguments." << std::endl;
 				return 0;
 			}
 			// Gradient descent with input params by user
@@ -155,12 +155,20 @@ int main(int argc, char** argv) {
 					try {
 						solver->FitData(dataLoader->getLoadedData());
 					}
-					catch (std::exception &e) {
+					catch (const char* msg) {
 						show_help(argv, "Grad Descent");
-						std::cerr << "Error: Gradient method failed to converge "
-							<< "in the maximum number of iterations.\n"
-							<< "Try different values of eta and max iterations"
-							<< std::endl;
+						if (std::string(msg).compare("Gradient descent method diverging") == 0) {
+							std::cerr << "Error: "
+								<< msg 
+								<< " Try reducing eta.\n" << std::endl;
+						}
+						else { 
+							// error: reached max iters before convergence.
+							std::cerr << "Error: " 
+								<< msg
+								<< " Try increasing max iterations.\n" 
+								<< std::endl;
+						}
 						return 0;
 					}
 
@@ -178,7 +186,7 @@ int main(int argc, char** argv) {
 		// Incorrect third argument type
 		else {
 			show_usage(argv[0]);
-			std::cout << "\nError: Third argument must be solve type. Use -n or -g.\n" << std::endl;			
+			std::cout << "Error: Third argument must be solve type. Use -n or -g.\n" << std::endl;			
 			return 0;
 		}
 	}
