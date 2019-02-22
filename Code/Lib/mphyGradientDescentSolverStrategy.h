@@ -28,11 +28,12 @@ private:
 	int maxIter;
 	Eigen::Matrix<double, Eigen::Dynamic, 2> copyXtoEigen(vecPairdd data);
 	Eigen::VectorXd copyYtoEigen(vecPairdd data);
+	pairdd theta_best;
 
 public:
 	gradDesSolver() {
-		eta = 0.005;
-		maxIter = 10000;
+		eta = 0.1;
+		maxIter = 1000;
 	}
 	gradDesSolver(double Eta, int maxIterations){
 		eta = Eta;
@@ -40,6 +41,7 @@ public:
 	}
 
 	pairdd FitData(vecPairdd data) override;
+	pairdd getThetaBest() { return theta_best; }
 };
 
 } // end namespace mphy

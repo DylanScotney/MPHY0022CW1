@@ -84,8 +84,9 @@ pairdd gradDesSolver::FitData(vecPairdd data){
 		}
 
 	}
+	theta_best = std::make_pair(theta(0), theta(1));
 	
-	return pairdd(theta(0), theta(1));
+	return theta_best;
 }
 
 } // end namespace mphy
