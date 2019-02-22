@@ -29,6 +29,7 @@ public:
 		filename = FILENAME; 
 	}
 	vecPairdd GetData() override;
+	vecPairdd getLoadedData() { return loaded_data; }
 };
 
 } // end namespace mphy
