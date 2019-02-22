@@ -22,8 +22,8 @@ See LICENSE.txt in the top level directory for details.
 
 
 static void show_usage(std::string name) {
-	std::cerr << "Usage:\t" << name << " <data filename>.txt "
-		<< "<solvetype>\n"
+	std::cerr << "Usage:\n" << name << "<data filename>.txt "
+		<< "<solvetype>\n\n"
 		<< "Options:\n"
 		<< "\t-h,--help\t\tShow help message\n"
 		<< "Solve Types:\n"
@@ -40,8 +40,8 @@ static void show_help(char** argv, std::string helpWith) {
 			<< argv[0] << " <datafilename>.txt "
 			<< "<solvetype>\n\n"
 			<< "NOTE:\n"
-			<< "<filename> must be .txt type\n"
-			<< "Data must be a set of x and y points and is loaded assuming 2 "
+			<< "- <filename> must be .txt type\n"
+			<< "- Data must be a set of x and y points and is loaded assuming 2 "
 			<< "values per line.\n\n"
 			<< "Optional Arguments:\n"
 			<< "Either -n, --normSolve or -g,--gradDescent must be used "
@@ -53,8 +53,8 @@ static void show_help(char** argv, std::string helpWith) {
 		std::cout << "\nGrad Descent Help:" << std::endl;
 		std::cerr << "Usage:\t" << argv[0] << " <data filename>.txt "
 			<< "<eta> <max iterations>\n"
-			<< "eta must be bound in 0 < eta < 1.\n"
-			<< "Max iterations must be an integer"
+			<< "- eta must be bound in 0 < eta < 1.\n"
+			<< "- Max iterations must be an integer\n"
 			<< std::endl;
 	}
 
@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
 			dataLoader->GetData();
 		}
 		catch (std::exception &e) {
-			std::cerr << "\nFile not found." << std::endl; 
+			std::cerr << "\nError: File not found." << std::endl; 
 			show_usage(argv[0]);
 			std::cout << "Ensure file is first argument" << std::endl;			
 			return 0;
@@ -101,7 +101,7 @@ int main(int argc, char** argv) {
 		///////////////////// PARSING SOLN METHOD ///////////////////////// 
 		// No method Chosen
 		if (!argv[2]) {
-			std::cout << "\nThird argument must be solve type. Use -n or -g.\n" << std::endl;
+			std::cout << "\nError: Third argument must be solve type. Use -n or -g.\n" << std::endl;
 			show_usage(argv[0]);
 			return 0;
 		}
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
 		else if (std::string(argv[2]) == "-n" || std::string(argv[2]) == "--normSolver") {
 			// no extra args for norm solution
 			if (!argv[3]) {
-				std::cout << "Solving via Normal Equation\n" << std::endl;
+				std::cout << "\nSolving via Normal Equation\n" << std::endl;
 				std::unique_ptr<mphy::normSolver> solver(new mphy::normSolver());
 				mphy::pairdd theta_norm = solver->FitData(dataLoader->getLoadedData());
 				output_solution(theta_norm);
@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
 			// Show general help since no extra args for norm soln
 			else {
 				show_help(argv, "General");
-				std::cerr << "There is no 3rd arg for Normal Solution, -n."
+				std::cerr << "Error: There is no 3rd arg for Normal Solution, -n."
 					<< std::endl;		
 				return 0;
 			}			
@@ -133,6 +133,12 @@ int main(int argc, char** argv) {
 				mphy::pairdd theta_grad = solver->FitData(dataLoader->getLoadedData());
 				output_solution(theta_grad);
 			}
+			//needs at least 5 arguments if not using default params
+			else if (argc == 4) {
+				show_help(argv, "Grad Descent");
+				std::cout << "\nError: Incorrect number of additional Arguments." << std::endl;
+				return 0;
+			}
 			// Gradient descent with input params by user
 			else if (argc == 5) {
 				// convert strings to double/int
@@ -140,7 +146,7 @@ int main(int argc, char** argv) {
 				int maxIters = std::stoi(argv[4]);
 				if (eta<0.0 || eta >1.0) {
 					show_help(argv, "Grad Descent");
-					std::cerr << "3rd arg eta must be bound by 0 < eta < 1."
+					std::cerr << "Error: 3rd arg eta must be bound by 0 < eta < 1."
 						<< std::endl;
 					return 0;
 				}
@@ -151,7 +157,7 @@ int main(int argc, char** argv) {
 					}
 					catch (std::exception &e) {
 						show_help(argv, "Grad Descent");
-						std::cerr << "Gradient method failed to converge "
+						std::cerr << "Error: Gradient method failed to converge "
 							<< "in the maximum number of iterations.\n"
 							<< "Try different values of eta and max iterations"
 							<< std::endl;
@@ -164,7 +170,7 @@ int main(int argc, char** argv) {
 			}
 			else {
 				show_help(argv, "Grad Descent");
-				std::cout << "Incorrect additional Arguments." << std::endl;
+				std::cout << "Error: Incorrect additional Arguments." << std::endl;
 				return 0;
 			}
 				
@@ -172,7 +178,7 @@ int main(int argc, char** argv) {
 		// Incorrect third argument type
 		else {
 			show_usage(argv[0]);
-			std::cout << "\nThird argument must be solve type. Use -n or -g.\n" << std::endl;			
+			std::cout << "\nError: Third argument must be solve type. Use -n or -g.\n" << std::endl;			
 			return 0;
 		}
 	}
