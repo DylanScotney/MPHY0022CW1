@@ -22,7 +22,7 @@ See LICENSE.txt in the top level directory for details.
 
 
 static void show_usage(std::string name) {
-	std::cerr << "Usage:\n" << name << "<data filename>.txt "
+	std::cerr << "Usage:\n" << name << " <data filename>.txt "
 		<< "<solvetype>\n\n"
 		<< "Options:\n"
 		<< "\t-h,--help\t\tShow help message\n"
@@ -41,8 +41,8 @@ static void show_help(char** argv, std::string helpWith) {
 			<< "<solvetype>\n\n"
 			<< "NOTE:\n"
 			<< "- <filename> must be .txt type\n"
-			<< "- Data must be a set of x and y points and is loaded assuming 2 "
-			<< "values per line.\n\n"
+			<< "- Data must be a set of x and y points and is loaded assuming "
+			<< "2 values per line.\n\n"
 			<< "Optional Arguments:\n"
 			<< "Either -n, --normSolve or -g,--gradDescent must be used "
 			<< "for the 3rd argument as solve types.\n"
@@ -65,7 +65,17 @@ static void output_solution(mphy::pairdd theta) {
 		<< "c1: " << theta.first << "\n"
 		<< "c2 " << theta.second << "\n"
 		<< std::endl;
+}
 
+bool hasSuffix(const std::string &str, const std::string &suffix)
+{
+	return str.size() >= suffix.size() &&
+		str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
+}
+bool ofTypetxt(const std::string &str) {
+	if (hasSuffix(str, ".txt")) return true;
+	else if (hasSuffix(str, ".TXT")) return true;
+	else return false;
 }
 
 int main(int argc, char** argv) {
@@ -85,29 +95,41 @@ int main(int argc, char** argv) {
 	else {
 
 		/////////////////////// PARSING FILE ///////////////////////// 
-		// Check first argument is .txt file here
+		std::cout << argv[1] << std::endl;
+		//Checking file to be type .txt
+		if (!ofTypetxt(argv[1])) {
+			show_help(argv, "General");
+			std::cerr << "Error: data file must be of type .txt" << std::endl;
+			return 0;
+		}
+
 		std::unique_ptr<mphy::dataLoadFile> dataLoader(new mphy::dataLoadFile(argv[1]));
-		// Look for file and loads data if found
+		// checks file is found and loads data if so
 		try {
 			dataLoader->GetData();
 		}
 		catch (std::exception &e) {
 			std::cerr << "\nError: File not found." << std::endl; 
 			show_usage(argv[0]);
-			std::cout << "Ensure file is first argument" << std::endl;			
+			std::cerr << "Ensure file is first argument" << std::endl;			
 			return 0;
 		}
 		
 		///////////////////// PARSING SOLN METHOD ///////////////////////// 
+
 		// No method Chosen
 		if (!argv[2]) {
-			std::cout << "\nError: Third argument must be solve type. Use -n or -g.\n" << std::endl;
+			std::cerr << "\nError: Third argument must be solve type. "
+				<<"Use -n or -g.\n" 
+				<< std::endl;
 			show_usage(argv[0]);
 			return 0;
 		}
 
 		/////////////// Solving via Normal Equation ///////////////////////
-		else if (std::string(argv[2]) == "-n" || std::string(argv[2]) == "--normSolver") {
+		else if (std::string(argv[2]) == "-n" 
+				 || std::string(argv[2]) == "--normSolver") {
+
 			// no extra args for norm solution
 			if (!argv[3]) {
 				std::cout << "\nSolving via Normal Equation\n" << std::endl;
@@ -136,7 +158,8 @@ int main(int argc, char** argv) {
 			//needs at least 5 arguments if not using default params
 			else if (argc == 4) {
 				show_help(argv, "Grad Descent");
-				std::cout << "Error: Incorrect number of additional Arguments." << std::endl;
+				std::cerr << "Error: Incorrect number of additional Arguments." 
+					<< std::endl;
 				return 0;
 			}
 			// Gradient descent with input params by user
