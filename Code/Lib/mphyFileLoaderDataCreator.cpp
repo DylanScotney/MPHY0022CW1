@@ -19,13 +19,22 @@ See LICENSE.txt in the top level directory for details.
 
 namespace mphy {
 
-vecPairdd mphy::dataLoadFile::GetData(){
+
+bool dataLoadFile::checkFile(std::string filename)
+{
 	std::ifstream infile(filename);
+	if (infile) return true;
 
 	if (!infile) {
 		throw std::runtime_error("File not found");
 	}
+}
 
+
+vecPairdd mphy::dataLoadFile::GetData(){
+	checkFile(filename);
+	std::ifstream infile(filename);
+	
 	double x, y;
 	while (infile >> x >> y) {
 		loaded_data.push_back(std::make_pair(x, y));
@@ -33,5 +42,6 @@ vecPairdd mphy::dataLoadFile::GetData(){
 	
 	return loaded_data;
 }
+
 
 }

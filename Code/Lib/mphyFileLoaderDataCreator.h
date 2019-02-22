@@ -28,6 +28,7 @@ public:
 	dataLoadFile(std::string FILENAME) {
 		filename = FILENAME; 
 	}
+	bool checkFile(std::string filename);
 	vecPairdd GetData() override;
 	vecPairdd getLoadedData() { return loaded_data; }
 };
