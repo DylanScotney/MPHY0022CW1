@@ -21,6 +21,7 @@ See LICENSE.txt in the top level directory for details.
 #include "vectorPairTypes.h"
 #include <iostream>
 #include <fstream>
+#include <string>
  
 
 namespace mphy {
@@ -89,13 +90,13 @@ TEST_CASE("Distribution of mock dataset", "linDataCreator") {
 	REQUIRE(fabs(xAvrge - xExpct) < tol);
 }
 
-TEST_CASE("Instansiation of normSolver", "Norm Eqn Solver") {
+TEST_CASE("Instansiation of normSolver", "normSolver") {
 	std::unique_ptr<normSolver> solver(new normSolver);
 
 	REQUIRE(solver);
 }
 
-TEST_CASE("Copy vector pair data to Eigen", "Norm Eqn Solver") {
+TEST_CASE("Copy vector pair data to Eigen", "normSolver") {
 	/*
 	Tests copyXtoEigen and copyYtoEigen. 
 	For known input data
@@ -126,7 +127,7 @@ TEST_CASE("Copy vector pair data to Eigen", "Norm Eqn Solver") {
 }
 
 
-TEST_CASE("Normal Eqn Solution with non-rand data", "Norm Eqn Solver") {
+TEST_CASE("Normal Eqn Solution with non-rand data", "normSolver") {
 	double tol = 1e-6; 
 	std::unique_ptr<normSolver> solver(new normSolver);
 
@@ -145,7 +146,7 @@ TEST_CASE("Normal Eqn Solution with non-rand data", "Norm Eqn Solver") {
 	
 }
 
-TEST_CASE("Normal Eqn Solution with zero noise", "Norm Eqn Solver") {
+TEST_CASE("Normal Eqn Solution with zero noise", "normSolver") {
 
 	double tol = 1e-6;
 
@@ -176,24 +177,39 @@ TEST_CASE("Gradient Descent Solution with zero noise", "gradDesSolver") {
 	REQUIRE(fabs(theta_best.second - 4.0) < tol);
 }
 
-TEST_CASE("Convergence error thrown", "gradDesSolver") {
+TEST_CASE("Divergence error thrown", "gradDesSolver") {
 
 	double tol = 1e-6;
 
 	std::unique_ptr<linDataCreator> lineardata(new linDataCreator(4, 7, 0, 20, 0, 100));
-	std::unique_ptr<gradDesSolver> solver(new gradDesSolver(1, 10000));
+	std::unique_ptr<gradDesSolver> solver(new gradDesSolver(2, 100));
 
 	vecPairdd mockData = lineardata->GetData();
 
-	bool caught = false;
 	try {
 		pairdd theta_best = solver->FitData(mockData);
 	}
-	catch (std::exception& e) {
-		caught = true;
+	catch (const char* msg) {
+		REQUIRE(std::string(msg).compare("Gradient descent method diverging") == 0);
 	}
 
-	REQUIRE(caught);
+}
+
+TEST_CASE("max iterations error thrown", "gradDesSolver") {
+
+	double tol = 1e-6;
+
+	std::unique_ptr<linDataCreator> lineardata(new linDataCreator(4, 7, 0, 20, 0, 100));
+	std::unique_ptr<gradDesSolver> solver(new gradDesSolver(0.005, 100));
+
+	vecPairdd mockData = lineardata->GetData();
+
+	try {
+		pairdd theta_best = solver->FitData(mockData);
+	}
+	catch (const char* msg) {
+		REQUIRE(std::string(msg).compare("Gradient descent reached max iterations without convergence.") == 0);
+	}
 
 }
 
