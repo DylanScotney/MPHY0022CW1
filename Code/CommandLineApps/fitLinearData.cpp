@@ -14,6 +14,7 @@ See LICENSE.txt in the top level directory for details.
 
 #include "mphyFileLoaderDataCreator.h"
 #include "mphyNormalEquationSolverStrategy.h"
+#include "mphyGradientDescentSolverStrategy.h"
 #include "vectorPairTypes.h"
 #include <iostream>
 #include <string>
@@ -49,16 +50,26 @@ static void show_help(char** argv, std::string helpWith) {
 	}
 
 	if (helpWith == "Grad Descent") {
-		std::cout << "Grad Descent Help" << std::endl;
+		std::cout << "\nGrad Descent Help:" << std::endl;
+		std::cerr << "Usage:\t" << argv[0] << " <data filename>.txt "
+			<< "<eta> <max iterations>\n"
+			<< "eta must be bound in 0 < eta < 1.\n"
+			<< "Max iterations must be an integer"
+			<< std::endl;
 	}
 
+}
+
+static void output_solution(mphy::pairdd theta) {
+	std::cerr << "Fitting linear data y = c1*x + c2:\n"
+		<< "c1: " << theta.first << "\n"
+		<< "c2 " << theta.second << "\n"
+		<< std::endl;
 
 }
 
 int main(int argc, char** argv) {
-
-	mphy::pairdd theta_best;
-
+	
 	/////////////////////// NO ARGS PARSED ///////////////////////// 
 	// show_usage() if no args parsed
 	if (argc < 2) {
@@ -81,10 +92,9 @@ int main(int argc, char** argv) {
 			dataLoader->GetData();
 		}
 		catch (std::exception &e) {
-			std::cerr << "\nFile not found.\n"
-				<< "Ensure data file is first argument and correct path is used.\n"
-				<< std::endl;
+			std::cerr << "\nFile not found." << std::endl; 
 			show_usage(argv[0]);
+			std::cout << "Ensure file is first argument" << std::endl;			
 			return 0;
 		}
 		
@@ -95,33 +105,74 @@ int main(int argc, char** argv) {
 			show_usage(argv[0]);
 			return 0;
 		}
-		// Solving via Normal Equation
+
+		/////////////// Solving via Normal Equation ///////////////////////
 		else if (std::string(argv[2]) == "-n" || std::string(argv[2]) == "--normSolver") {
-			// Show general help since no extra args for norm soln
+			// no extra args for norm solution
 			if (!argv[3]) {
+				std::cout << "Solving via Normal Equation\n" << std::endl;
 				std::unique_ptr<mphy::normSolver> solver(new mphy::normSolver());
-				theta_best = solver->FitData(dataLoader->getLoadedData());
-				std::cerr << "Fitting linear data y = c1*x + c2:\n"
-					<< "c1: " << theta_best.first << "\n"
-					<< "c2 " << theta_best.second << "\n"
-					<< std::endl;
+				mphy::pairdd theta_norm = solver->FitData(dataLoader->getLoadedData());
+				output_solution(theta_norm);
 			}
+			// Show general help since no extra args for norm soln
 			else {
 				show_help(argv, "General");
 				std::cerr << "There is no 3rd arg for Normal Solution, -n."
-					<< std::endl;				
-			}
-			
+					<< std::endl;		
+				return 0;
+			}			
 		}
-		// Sovling via Gradient Descent
+
+		///////////////// Sovling via Gradient Descent /////////////////////
 		else if (std::string(argv[2]) == "-g" || std::string(argv[2]) == "--gradDescent") {
-			std::cout << "Soving with grad descent" << std::endl;
+			// Gradient descent with default params
+			if (!argv[3]) {
+				std::cout << "\nSoving with Gradient Descent:\n" << std::endl;
+				std::unique_ptr<mphy::gradDesSolver> solver(new mphy::gradDesSolver());
+				mphy::pairdd theta_grad = solver->FitData(dataLoader->getLoadedData());
+				output_solution(theta_grad);
+			}
+			// Gradient descent with input params by user
+			else if (argc == 5) {
+				// convert strings to double/int
+				double eta = atof(argv[3]);
+				int maxIters = std::stoi(argv[4]);
+				if (eta<0.0 || eta >1.0) {
+					show_help(argv, "Grad Descent");
+					std::cerr << "3rd arg eta must be bound by 0 < eta < 1."
+						<< std::endl;
+					return 0;
+				}
+				else {
+					std::unique_ptr<mphy::gradDesSolver> solver(new mphy::gradDesSolver(eta, maxIters));
+					try {
+						solver->FitData(dataLoader->getLoadedData());
+					}
+					catch (std::exception &e) {
+						show_help(argv, "Grad Descent");
+						std::cerr << "Gradient method failed to converge "
+							<< "in the maximum number of iterations.\n"
+							<< "Try different values of eta and max iterations"
+							<< std::endl;
+						return 0;
+					}
+
+					std::cout << "\nSoving with Gradient Descent:\n" << std::endl;
+					output_solution(solver->getThetaBest());
+				}
+			}
+			else {
+				show_help(argv, "Grad Descent");
+				std::cout << "Incorrect additional Arguments." << std::endl;
+				return 0;
+			}
+				
 		}
 		// Incorrect third argument type
 		else {
 			show_usage(argv[0]);
-			std::cout << "\nThird argument must be solve type. Use -n or -g.\n" << std::endl;
-			
+			std::cout << "\nThird argument must be solve type. Use -n or -g.\n" << std::endl;			
 			return 0;
 		}
 	}
