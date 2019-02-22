@@ -12,8 +12,11 @@ See LICENSE.txt in the top level directory for details.
 
 =============================================================================*/
 
+#include "mphyFileLoaderDataCreator.h"
 #include <iostream>
 #include <string>
+#include <memory>
+
 
 static void show_usage(std::string name) {
 	std::cerr << "Usage:\t" << name << " <data filename>.txt\n"
@@ -62,7 +65,17 @@ int main(int argc, char** argv) {
 		show_help(argv, "General");
 		return 0;
 	}
-	
+
+	try {
+		std::unique_ptr<mphy::dataLoadFile> dataLoader(new mphy::dataLoadFile(argv[1]));
+		dataLoader->GetData();
+	}
+	catch (std::exception &e) {
+		std::cerr << "\nFile not found.\n"
+			<< "Ensure data file is first argument and correct path is used."
+			<< std::endl;
+	}
+
 
 	return 0;
 }
