@@ -61,6 +61,7 @@ Eigen::VectorXd gradDesSolver::copyYtoEigen(vecPairdd data) {
 pairdd gradDesSolver::FitData(vecPairdd data){	
 	double numData = data.size();
 	double convergetol = 1e-10;
+	double divergencetol = 1.0;
 	
 	Eigen::MatrixX2d xdata = copyXtoEigen(data);
 	Eigen::VectorXd ydata = copyYtoEigen(data);
@@ -76,11 +77,13 @@ pairdd gradDesSolver::FitData(vecPairdd data){
 			break;
 		}
 		else {
-			thetaPrev = theta;
 			if (i == maxIter - 1) {
-				throw std::runtime_error("Gradient descent reached max"
-										 "iterations without convergence.");
+				throw "Gradient descent reached max iterations without convergence.";
 			}
+			if (((theta - thetaPrev).norm() / (theta.norm())) > divergencetol) {
+				throw "Gradient descent method diverging";
+			}
+			thetaPrev = theta;
 		}
 
 	}
