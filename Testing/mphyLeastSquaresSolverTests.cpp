@@ -20,6 +20,7 @@ See LICENSE.txt in the top level directory for details.
 #include "mphyFileLoaderDataCreator.h"
 #include "vectorPairTypes.h"
 #include <iostream>
+#include <fstream>
  
 
 namespace mphy {
@@ -97,6 +98,7 @@ TEST_CASE("Instansiation of normSolver", "Norm Eqn Solver") {
 TEST_CASE("Copy vector pair data to Eigen", "Norm Eqn Solver") {
 	/*
 	Tests copyXtoEigen and copyYtoEigen. 
+	For known input data
 	*/
 
 	std::unique_ptr<normSolver> solver(new normSolver);
@@ -123,12 +125,13 @@ TEST_CASE("Copy vector pair data to Eigen", "Norm Eqn Solver") {
 
 }
 
+
 TEST_CASE("Normal Eqn Solution with non-rand data", "Norm Eqn Solver") {
-	double tol = 0.000001; //tolerance 
+	double tol = 1e-6; 
 	std::unique_ptr<normSolver> solver(new normSolver);
 
 	vecPairdd mockData = { { 1,2 },{ 2,2 },{ 5,7 },{ 3,7 } };
-	pairdd expectedSoln(1.428571428571428, 0.571428571428573);
+	pairdd expectedSoln(0.571428571428573, 1.428571428571428);
 
 	REQUIRE((fabs(solver->FitData(mockData).first 
 			- expectedSoln.first) 
@@ -154,8 +157,8 @@ TEST_CASE("Normal Eqn Solution with zero noise", "Norm Eqn Solver") {
 	vecPairdd mockData = lineardata->GetData();
 	theta_best = solver->FitData(mockData);
 
-	REQUIRE(fabs(theta_best.first - 4.0) < tol);
-	REQUIRE(fabs(theta_best.second - 7.0) < tol);
+	REQUIRE(fabs(theta_best.first - 7.0) < tol);
+	REQUIRE(fabs(theta_best.second - 4.0) < tol);
 }
 
 TEST_CASE("Gradient Descent Solution with zero noise", "gradDesSolver") {
@@ -163,14 +166,14 @@ TEST_CASE("Gradient Descent Solution with zero noise", "gradDesSolver") {
 	double tol = 1e-6;
 
 	std::unique_ptr<linDataCreator> lineardata(new linDataCreator(4, 7, 0, 20, 0, 100));
-	std::unique_ptr<gradDesSolver> solver(new gradDesSolver());
+	std::unique_ptr<gradDesSolver> solver(new gradDesSolver(0.005, 10000));
 
 	vecPairdd mockData = lineardata->GetData();
 
 	pairdd theta_best = solver->FitData(mockData);
 
-	REQUIRE(fabs(theta_best.first - 4.0) < tol);
-	REQUIRE(fabs(theta_best.second - 7.0) < tol);
+	REQUIRE(fabs(theta_best.first - 7.0) < tol);
+	REQUIRE(fabs(theta_best.second - 4.0) < tol);
 }
 
 TEST_CASE("Convergence error thrown", "gradDesSolver") {
@@ -194,13 +197,27 @@ TEST_CASE("Convergence error thrown", "gradDesSolver") {
 
 }
 
-TEST_CASE("Exract data from file", "dataLoadFile") {
-	std::string fileName = "C:\\Users\\dylan\\Dropbox\\UCL\\C++\\Coursework 01\\18138211\\MPHY0022CW1\\Testing\\Data\\TestData2.txt";
-	
-	std::unique_ptr<dataLoadFile> dataLoader(new dataLoadFile(fileName));
+TEST_CASE("Find correct file", "dataLoadFile") {
+	std::string filename = "C:\\Users\\dylan\\Dropbox\\UCL\\C++\\Coursework 01\\18138211\\MPHY0022CW1\\Testing\\Data\\TestData1.txt";
 
-	dataLoader->GetData();
+	std::unique_ptr<dataLoadFile> dataLoader(new dataLoadFile(filename));
 	
+	REQUIRE(dataLoader->checkFile(filename));	
+}
+
+TEST_CASE("Throwing exception when file not found", "dataLoadFile") {
+	std::string filename = "not a real file";
+
+	std::unique_ptr<dataLoadFile> dataLoader(new dataLoadFile(filename));
+	bool caught = false;
+	try {
+		dataLoader->checkFile(filename);
+	}
+	catch (std::exception &e) {
+		caught = true;
+	}
+	
+	REQUIRE(caught);
 }
 
 
