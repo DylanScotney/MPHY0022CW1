@@ -26,8 +26,6 @@ class gradDesSolver : public dataSolverI {
 private:
 	double eta;
 	int maxIter;
-	Eigen::Matrix<double, Eigen::Dynamic, 2> copyXtoEigen(vecPairdd data);
-	Eigen::VectorXd copyYtoEigen(vecPairdd data);
 	pairdd theta_best;
 
 public:

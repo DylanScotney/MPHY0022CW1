@@ -18,9 +18,11 @@ set(MPHYG0022CW1_LIBRARY_SRCS
   mphyBasicTypes.cpp
   mphyException.cpp
   mphyLinearDataCreator.cpp
+  mphyLinearModelSolverStrategyI.cpp
   mphyNormalEquationSolverStrategy.cpp
   mphyGradientDescentSolverStrategy.cpp
   mphyFileLoaderDataCreator.cpp
+
   # Add .cpp files here
 )
 

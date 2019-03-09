@@ -23,16 +23,8 @@ namespace mphy {
 
 class normSolver : public dataSolverI {	
 
-private: 
-	Eigen::Matrix<double, Eigen::Dynamic, 2> copyXtoEigen(vecPairdd data);
-	Eigen::VectorXd copyYtoEigen(vecPairdd data);
-
 public:
 	pairdd FitData(vecPairdd data) override;
-
-	////// For unit tests of private methods. DO NOT USE. //////
-	Eigen::VectorXd _testcopyYtoEigen(vecPairdd data);
-	Eigen::Matrix<double, Eigen::Dynamic, 2> _testcopyXtoEigen(vecPairdd data);
 };
 
 } // end namespace mphy
