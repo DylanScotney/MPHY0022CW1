@@ -33,4 +33,4 @@ endforeach()
 ##################################################################################################
 
 add_test(Example ${EXECUTABLE_OUTPUT_PATH}/mphyBasicTest)
-add_test(Testingargs ${EXECUTABLE_OUTPUT_PATH}/mphyLeastSquaresSolverTests)
+add_test(Testingargs ${EXECUTABLE_OUTPUT_PATH}/mphyLeastSquaresSolverTests ${DATA_DIR}/TestData1.txt)

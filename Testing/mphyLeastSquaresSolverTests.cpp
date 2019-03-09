@@ -229,14 +229,6 @@ TEST_CASE("max iterations error thrown", "gradDesSolver") {
 
 }
 
-TEST_CASE("Find correct file", "dataLoadFile") {
-	std::string filename = "C:\\Users\\dylan\\Dropbox\\UCL\\C++\\Coursework 01\\18138211\\MPHY0022CW1\\Testing\\Data\\TestData1.txt";
-
-	std::unique_ptr<dataLoadFile> dataLoader(new dataLoadFile(filename));
-	
-	REQUIRE(dataLoader->checkFile(filename));	
-}
-
 TEST_CASE("Throwing exception when file not found", "dataLoadFile") {
 	std::string filename = "not a real file";
 
