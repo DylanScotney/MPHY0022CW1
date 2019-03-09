@@ -90,42 +90,58 @@ TEST_CASE("Distribution of mock dataset", "linDataCreator") {
 	REQUIRE(fabs(xAvrge - xExpct) < tol);
 }
 
+TEST_CASE("Copy vector pair data to Eigen", "dataSolverI") {
+	/*
+	Tests protected methods, copyXtoEigen and copyYtoEigen from solver interface
+	by declaring a new inherited class
+	*/
+
+	class testdataSolver : public dataSolverI {
+	private:
+		vecPairdd mockData;
+		Eigen::Matrix<double, 4, 2> expectedXData;
+		Eigen::Vector4d expectedYData;
+
+	public:
+		EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+			testdataSolver() {
+			mockData = { { 1,2 },{ 2,2 },{ 5,7 },{ 3,7 } };
+			expectedXData << 1, 1, 1, 2, 1, 5, 1, 3;
+			expectedYData << 2, 2, 7, 7;
+		}
+
+		void testcopyXtoEigen() {
+			Eigen::Matrix<double, 4, 2> zeros;
+			zeros << 0, 0, 0, 0, 0, 0, 0, 0;
+
+			Eigen::MatrixX2d Xdata = copyXtoEigen(mockData);
+			REQUIRE(expectedXData - Xdata == zeros);
+		}
+
+		void testcopyYtoEigen() {
+			Eigen::Vector4d zeros;
+			zeros << 0, 0, 0, 0;
+
+			Eigen::VectorXd Ydata = copyYtoEigen(mockData);
+			REQUIRE(expectedYData - Ydata == zeros);
+
+		}
+
+		// not concerned about definition of FitData for this test
+		virtual pairdd FitData(vecPairdd data) { return pairdd(0, 0); }
+
+	};
+
+	std::unique_ptr<testdataSolver> tester(new testdataSolver);
+	tester->testcopyXtoEigen();
+	tester->testcopyYtoEigen();
+}
+
 TEST_CASE("Instansiation of normSolver", "normSolver") {
 	std::unique_ptr<normSolver> solver(new normSolver);
 
 	REQUIRE(solver);
 }
-
-TEST_CASE("Copy vector pair data to Eigen", "normSolver") {
-	/*
-	Tests copyXtoEigen and copyYtoEigen. 
-	For known input data
-	*/
-
-	std::unique_ptr<normSolver> solver(new normSolver);
-
-	vecPairdd mockData = { {1,2}, {2,2}, {5,7}, {3,7} };
-
-	Eigen::MatrixX2d Xdata;
-	Eigen::VectorXd Ydata;
-	Eigen::Matrix<double, 4, 2> expectedXdata;
-	Eigen::Vector4d expectedYdata;
-	Eigen::Matrix<double, 4, 2> zerosMx;
-	Eigen::Vector4d zerosVy;
-
-	expectedXdata << 1, 1, 1, 2, 1, 5, 1, 3;
-	expectedYdata << 2, 2, 7, 7;
-	zerosMx << 0, 0, 0, 0, 0, 0, 0, 0;
-	zerosVy << 0, 0, 0, 0; 
-
-	Xdata = solver->_testcopyXtoEigen(mockData);	
-	Ydata = solver->_testcopyYtoEigen(mockData);
-
-	REQUIRE(expectedXdata - Xdata == zerosMx);
-	REQUIRE(expectedYdata - Ydata == zerosVy);
-
-}
-
 
 TEST_CASE("Normal Eqn Solution with non-rand data", "normSolver") {
 	double tol = 1e-6; 
