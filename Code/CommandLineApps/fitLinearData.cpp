@@ -19,6 +19,7 @@ See LICENSE.txt in the top level directory for details.
 #include <iostream>
 #include <string>
 #include <memory>
+#include <iomanip>  
 
 
 static void show_usage(std::string name) {
@@ -50,7 +51,7 @@ static void show_help(char** argv, std::string helpWith) {
 	}
 
 	if (helpWith == "Grad Descent") {
-		std::cout << "\nGrad Descent Help:" << std::endl;
+		std::cerr << "\nGrad Descent Help:" << std::endl;
 		std::cerr << "Usage:\t" << argv[0] << " <data filename>.txt "
 			<< "<eta> <max iterations>\n"
 			<< "- eta must be bound in 0 < eta < 1.\n"
@@ -61,10 +62,11 @@ static void show_help(char** argv, std::string helpWith) {
 }
 
 static void output_solution(mphy::pairdd theta) {
-	std::cerr << "Fitting linear data y = c1*x + c2:\n"
+	std::cout << std::setprecision(8);
+	std::cout << "Fitting linear data y = c1*x + c2:\n"
 		<< "c1: " << theta.first << "\n"
-		<< "c2 " << theta.second << "\n"
-		<< std::endl;
+		<< "c2: " << theta.second << "\n"
+	    << std::endl;
 }
 
 bool hasSuffix(const std::string &str, const std::string &suffix)
@@ -95,7 +97,6 @@ int main(int argc, char** argv) {
 	else {
 
 		/////////////////////// PARSING FILE ///////////////////////// 
-		std::cout << argv[1] << std::endl;
 		//Checking file to be type .txt
 		if (!ofTypetxt(argv[1])) {
 			show_help(argv, "General");
@@ -127,8 +128,7 @@ int main(int argc, char** argv) {
 		}
 
 		/////////////// Solving via Normal Equation ///////////////////////
-		else if (std::string(argv[2]) == "-n" 
-				 || std::string(argv[2]) == "--normSolver") {
+		else if (std::string(argv[2]) == "-n" || std::string(argv[2]) == "--normSolve") {
 
 			// no extra args for norm solution
 			if (!argv[3]) {
@@ -140,7 +140,7 @@ int main(int argc, char** argv) {
 			// Show general help since no extra args for norm soln
 			else {
 				show_help(argv, "General");
-				std::cerr << "Error: There is no 3rd arg for Normal Solution, -n."
+				std::cerr << "Error: There is no optional args for Normal Solution, -n."
 					<< std::endl;		
 				return 0;
 			}			
@@ -154,13 +154,6 @@ int main(int argc, char** argv) {
 				std::unique_ptr<mphy::gradDesSolver> solver(new mphy::gradDesSolver());
 				mphy::pairdd theta_grad = solver->FitData(dataLoader->getLoadedData());
 				output_solution(theta_grad);
-			}
-			//needs at least 5 arguments if not using default params
-			else if (argc == 4) {
-				show_help(argv, "Grad Descent");
-				std::cerr << "Error: Incorrect number of additional Arguments." 
-					<< std::endl;
-				return 0;
 			}
 			// Gradient descent with input params by user
 			else if (argc == 5) {
@@ -201,7 +194,8 @@ int main(int argc, char** argv) {
 			}
 			else {
 				show_help(argv, "Grad Descent");
-				std::cout << "Error: Incorrect additional Arguments." << std::endl;
+				std::cerr << "Error: Incorrect number of optional Arguments."
+					<< std::endl;
 				return 0;
 			}
 				
@@ -209,7 +203,7 @@ int main(int argc, char** argv) {
 		// Incorrect third argument type
 		else {
 			show_usage(argv[0]);
-			std::cout << "Error: Third argument must be solve type. Use -n or -g.\n" << std::endl;			
+			std::cerr << "Error: Third argument must be solve type. Use -n or -g.\n" << std::endl;			
 			return 0;
 		}
 	}
