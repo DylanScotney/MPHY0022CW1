@@ -63,9 +63,9 @@ static void show_help(char** argv, std::string helpWith) {
 
 static void output_solution(mphy::pairdd theta) {
 	std::cout << std::setprecision(8);
-	std::cout << "Fitting linear data y = c1*x + c2:\n"
-		<< "c1: " << theta.first << "\n"
-		<< "c2: " << theta.second << "\n"
+	std::cout << "Fitting linear data y = c0 + c1*x:\n"
+		<< "c0: " << theta.first << "\n"
+		<< "c1: " << theta.second << "\n"
 	    << std::endl;
 }
 
